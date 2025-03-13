@@ -28,12 +28,26 @@ def receive_sms():
     sender = data.get("sender")
     message = data.get("message")
     time = data.get("time")
+    
+    # Si el mensaje tiene un PIN, extraerlo
+    pin = None
+    if "PIN" in message:  # Suponiendo que el mensaje tiene un formato como "PIN: 1234"
+        pin = message.split("PIN:")[1].strip()
 
     # Guardar en la base de datos
-    sms_data = {"sender": sender, "message": message, "time": time}
+    sms_data = {"sender": sender, "message": message, "time": time, "pin": pin}
     collection.insert_one(sms_data)
 
     return jsonify({"status": "success", "message": "SMS received"}), 200
+
+
+@app.route("/api/sms", methods=["GET"])
+def get_sms():
+    # Obtener los mensajes de la base de datos
+    messages = collection.find()
+    sms_list = [{"sender": sms["sender"], "message": sms["message"], "time": sms["time"], "pin": sms.get("pin")} for sms in messages]
+
+    return jsonify({"status": "success", "messages": sms_list}), 200
 
 
 if __name__ == "__main__":

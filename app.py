@@ -1,11 +1,24 @@
 from flask import Flask, request, jsonify
 from pymongo import MongoClient
+from pymongo.server_api import ServerApi
 import os
 
 app = Flask(__name__)
 
-# Conexión a MongoDB
-client = MongoClient("mongodb://localhost:27017/")
+# URI de conexión a MongoDB Atlas
+uri = "mongodb+srv://dbPines:Mausof1515@cluster0.lncbj.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+
+# Crear un cliente de MongoDB y conectar al servidor
+client = MongoClient(uri, server_api=ServerApi('1'))
+
+# Enviar un ping para confirmar una conexión exitosa
+try:
+    client.admin.command('ping')
+    print("Pinged your deployment. You successfully connected to MongoDB!")
+except Exception as e:
+    print(f"Error connecting to MongoDB: {e}")
+
+# Conectar a la base de datos y colección específicas
 db = client["sms_database"]
 collection = db["sms_messages"]
 

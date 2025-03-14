@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", function() {
     // URL de tu API en Vercel (actualiza esta URL con la que tu backend tenga)
     const apiUrl = "https://sms-api-coral.vercel.app/api/sms"; 
+    // const apiUrl = "http://localhost:5000/api/sms";
 
     // Función para obtener los SMS desde la API
     function fetchSMS() {
